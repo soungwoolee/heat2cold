@@ -203,7 +203,7 @@ input:focus,textarea:focus{outline:3px solid var(--lemon);outline-offset:1px}
   <section class="card" id="apply">
     <div class="ticket" id="ticket"><span class="mono" style="font-size:12px;font-weight:700">MISSION CLEAR</span><br>냉탕과 열정사이 EP.01 · 11.20 FRI 20:00</div>
     <h2 class="p-h2">Apply</h2>
-    <form id="form" name="ttam-ep01" method="POST" data-netlify="true" netlify-honeypot="bot" novalidate><input type="hidden" name="form-name" value="ttam-ep01"><input type="hidden" name="poem"><input type="hidden" name="game"><p hidden><input name="bot"></p>
+    <form id="form" name="ttam-ep01" method="POST" data-netlify="true" netlify-honeypot="bot" novalidate><input type="hidden" name="form-name" value="ttam-ep01"><input type="hidden" name="poem"><input type="hidden" name="game"><input type="hidden" name="src"><p hidden><input name="bot"></p>
       <div class="row2">
         <label>이름<input name="name" autocomplete="name" required></label>
         <label>나이<input name="age" inputmode="numeric" maxlength="3" required></label>
@@ -480,12 +480,12 @@ document.getElementById('form').addEventListener('submit',async e=>{
  const btn=document.getElementById('go');btn.disabled=true;btn.textContent='보내는 중';
  try{
   if(/netlify\.app$/.test(location.hostname)){
-   f.poem.value=data.poem;f.game.value=passed?'통과':'건너뜀';
+   f.poem.value=data.poem;f.game.value=passed?'통과':'건너뜀';f.src.value=new URLSearchParams(location.search).get('ad')||'';
    const res=await fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams(new FormData(f)).toString()});
    if(!res.ok)throw new Error(res.status);
   }else if(/github\.io$/.test(location.hostname)){
    // 깃허브 페이지에서는 신청서를 Netlify 폼으로 보냄
-   f.poem.value=data.poem;f.game.value=passed?'통과':'건너뜀';
+   f.poem.value=data.poem;f.game.value=passed?'통과':'건너뜀';f.src.value=new URLSearchParams(location.search).get('ad')||'';
    await fetch('https://heat2cold.netlify.app/',{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams(new FormData(f)).toString()});
   }else if(ENDPOINT)await fetch(ENDPOINT,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(data)});
   f.hidden=true;document.getElementById('pay').hidden=false;
