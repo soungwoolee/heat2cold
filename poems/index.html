@@ -1,0 +1,88 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>사우나 3행시 · 냉탕과 열정사이</title>
+<meta property="og:title" content="사우나 3행시 모음 · 냉탕과 열정사이 EP.01">
+<meta property="og:description" content="신청자들이 남긴 사우나 3행시에 반응을 남겨 주세요">
+<meta property="og:image" content="https://heat2cold.netlify.app/og.jpg">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gloock&display=swap">
+<style>
+@font-face{font-family:EJ;src:url(/fonts/BMEULJIRO.woff2) format("woff2");font-display:swap}
+:root{--bg:#2b1d14;--ink:#2b1d14;--paper:#fffaf0;--cream:#f6eed8;--red:#c8162b;--brown:#6b4a35;--lemon:#f4d84a;--muted:#a8927a;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--cream);font-family:-apple-system,"Apple SD Gothic Neo",sans-serif;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 60px}
+.wrap{max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+header{margin:0 calc(-1 * max(16px,env(safe-area-inset-left,0px)));padding:34px 20px 26px;text-align:center;background:
+ linear-gradient(rgba(0,0,0,.12),rgba(0,0,0,.25)),
+ repeating-linear-gradient(90deg,#8e8a83 0 3px,transparent 3px 44px),repeating-linear-gradient(0deg,#8e8a83 0 3px,transparent 3px 44px),#cf2129}
+header small{font-family:Gloock,serif;color:#fff;opacity:.9;letter-spacing:.08em}
+header h1{margin:6px 0 4px;font-family:EJ,sans-serif;font-weight:400;font-size:44px;color:#fff;text-shadow:0 4px 0 var(--ink)}
+header p{margin:0;color:#fff;font-size:15px;line-height:1.6}
+.note{background:var(--lemon);color:var(--ink);border-radius:8px;padding:10px 14px;font-size:14px;line-height:1.5;font-family:EJ,sans-serif}
+.card{background:var(--paper);color:var(--ink);border-radius:10px;border:4px solid #3b2a20;padding:18px 18px 14px;display:flex;flex-direction:column;gap:12px}
+.lines{display:grid;grid-template-columns:44px 1fr;gap:6px 10px;align-items:center}
+.lines b{font-family:EJ,sans-serif;font-weight:400;font-size:34px;color:var(--red);text-align:center;line-height:1}
+.lines span{font-family:EJ,sans-serif;font-size:19px;line-height:1.45;min-width:0;overflow-wrap:anywhere}
+.by{font-size:13px;color:var(--brown);text-align:right}
+.reacts{display:flex;flex-wrap:wrap;gap:6px}
+.reacts button{font:inherit;font-size:15px;border:2px solid var(--ink);background:#fff;color:var(--ink);border-radius:999px;padding:5px 11px;cursor:pointer;transition:transform .12s ease,background .12s ease}
+.reacts button:hover{transform:translateY(-2px)}
+.reacts button:active{transform:scale(.92)}
+.reacts button.on{background:var(--lemon)}
+.reacts .ctog{margin-left:auto;border-style:dashed}
+.comments{display:flex;flex-direction:column;gap:8px;border-top:2px dashed #d8ccb2;padding-top:10px}
+.cm{font-size:14px;line-height:1.5}.cm b{color:var(--brown);margin-right:6px}
+.cform{display:grid;grid-template-columns:90px 1fr auto;gap:6px}
+.cform input{font:inherit;font-size:15px;border:2px solid var(--ink);border-radius:6px;padding:8px;min-width:0;background:#fff;color:var(--ink)}
+.cform button{font:inherit;font-weight:700;border:0;border-radius:6px;background:var(--ink);color:var(--lemon);padding:0 12px;cursor:pointer}
+.empty,.err{text-align:center;color:var(--muted);padding:30px 0;line-height:1.7}
+.back{display:block;text-align:center;font-family:EJ,sans-serif;font-size:20px;background:var(--lemon);color:var(--ink);text-decoration:none;border-radius:8px;padding:13px}
+@keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.25)}100%{transform:scale(1)}}
+.pop{animation:pop .3s ease}
+</style></head><body>
+<header><small>HEAT2COLD · EP.01</small><h1>사우나 3행시</h1><p>신청할 때 남긴 3행시를 모았어요<br>마음에 드는 3행시에 반응이랑 댓글을 남겨 주세요</p></header>
+<div class="wrap">
+  <div class="note">잘 쓴 3행시엔 당일 특별 상품이 있어요 🎁</div>
+  <div id="list"><p class="empty">불러오는 중…</p></div>
+  <a class="back" href="/">아직 신청 안 했다면 신청하러 가기</a>
+</div>
+<script>
+const EMOJIS=['🔥','🧊','😂','👏','🥵'],API='/api/poems';
+const esc=s=>String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let mine={};try{mine=JSON.parse(localStorage.getItem('poemReacts')||'{}')}catch(e){}
+const save=()=>{try{localStorage.setItem('poemReacts',JSON.stringify(mine))}catch(e){}};
+let nick='';try{nick=localStorage.getItem('poemNick')||''}catch(e){}
+function card(p){
+ const r=EMOJIS.map(e=>`<button data-e="${e}" class="${(mine[p.id]||[]).includes(e)?'on':''}">${e} <span>${p.reactions[e]||0}</span></button>`).join('');
+ const cms=p.comments.map(c=>`<div class="cm"><b>${esc(c.nick)}</b>${esc(c.text)}</div>`).join('');
+ return `<article class="card" data-id="${p.id}">
+  <div class="lines"><b>사</b><span>${esc(p.lines[0])}</span><b>우</b><span>${esc(p.lines[1])}</span><b>나</b><span>${esc(p.lines[2])}</span></div>
+  <div class="by">${esc(p.by)}</div>
+  <div class="reacts">${r}<button class="ctog">💬 ${p.comments.length}</button></div>
+  <div class="comments" hidden>${cms||'<div class="cm" style="color:#a8927a">첫 댓글을 남겨 주세요</div>'}
+   <form class="cform"><input name="nick" placeholder="닉네임" maxlength="12" value="${esc(nick)}"><input name="text" placeholder="댓글" maxlength="120" required><button>남기기</button></form></div>
+ </article>`}
+async function load(){
+ const box=document.getElementById('list');
+ try{const ps=await (await fetch(API)).json();box.innerHTML=ps.length?ps.map(card).join(''):'<p class="empty">아직 3행시가 없어요<br>신청할 때 첫 3행시를 남겨 주세요</p>';box.style.display='flex';box.style.flexDirection='column';box.style.gap='14px'}
+ catch(e){box.innerHTML='<p class="err">잠시 후 다시 열어 주세요</p>'}
+}
+async function post(body){const r=await fetch(API,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body)});if(!r.ok)throw 0;return r.json()}
+document.addEventListener('click',async e=>{
+ const b=e.target.closest('.reacts button');if(!b)return;
+ const art=b.closest('.card'),id=art.dataset.id;
+ if(b.classList.contains('ctog')){art.querySelector('.comments').hidden=!art.querySelector('.comments').hidden;return}
+ const em=b.dataset.e;mine[id]=mine[id]||[];if(mine[id].includes(em))return;
+ const sp=b.querySelector('span');sp.textContent=+sp.textContent+1;b.classList.add('on','pop');mine[id].push(em);save();
+ try{await post({action:'react',id,emoji:em})}catch(x){sp.textContent=+sp.textContent-1;b.classList.remove('on');mine[id]=mine[id].filter(v=>v!==em);save()}
+});
+document.addEventListener('submit',async e=>{
+ const f=e.target.closest('.cform');if(!f)return;e.preventDefault();
+ const art=f.closest('.card'),id=art.dataset.id,text=f.text.value.trim();if(!text)return;
+ nick=f.nick.value.trim();try{localStorage.setItem('poemNick',nick)}catch(x){}
+ f.querySelector('button').disabled=true;
+ try{const p=await post({action:'comment',id,nick,text});const tmp=document.createElement('div');tmp.innerHTML=card(p);const n=tmp.firstElementChild;n.querySelector('.comments').hidden=false;art.replaceWith(n)}
+ catch(x){f.querySelector('button').disabled=false;alert('댓글이 안 올라갔어요 잠시 후 다시 해 주세요')}
+});
+load();
+</script></body></html>

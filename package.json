@@ -1,0 +1,24 @@
+{
+  "name": "heat2cold_site",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/soungwoolee/heat2cold.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/soungwoolee/heat2cold/issues"
+  },
+  "homepage": "https://github.com/soungwoolee/heat2cold#readme",
+  "dependencies": {
+    "@netlify/blobs": "^8.2.0"
+  }
+}
